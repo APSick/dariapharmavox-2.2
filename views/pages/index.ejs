@@ -1,0 +1,107 @@
+<% layout('../partials/layout') %>
+
+    <section class="grid gap-8 lg:grid-cols-[3fr,2fr] items-center">
+        <div class="space-y-6">
+            <div class="inline-flex items-center gap-2 rounded-full bg-slate-900/60 border border-white/10 px-3 py-1 text-xs text-slate-300/90">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 2 курс · ФФМ МГУ · фармация & фундаментальная медицина
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-50">
+                Путь во взрослую<span class="text-sky-300"> фармацию</span>: адаптация, наука и карьера после ФФМ.
+            </h1>
+
+            <p class="text-sm sm:text-base text-slate-200/90 leading-relaxed">
+                Я&nbsp;— Дарья, студентка 2 курса факультета фундаментальной медицины МГУ, занимаюсь фармацевтическими и биомедицинскими исследованиями и помогаю первокурсникам адаптироваться к&nbsp;учёбе и будущей профессиональной жизни. На этом сайте я делюсь интервью
+                со старшекурсниками и выпускниками, своими научными проектами и заметками из фарма-жизни.
+            </p>
+
+            <div class="flex flex-wrap gap-3">
+                <a href="/interviews" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-sm font-semibold shadow-lg shadow-sky-500/40 transition">
+        Смотреть интервью
+        <span class="text-base">▶</span>
+      </a>
+                <a href="/pharma-life" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-400/40 bg-slate-900/70 text-sm text-slate-100 hover:border-sky-300 hover:text-sky-200 transition">
+        Фарма-жизнь и блог
+      </a>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 text-xs sm:text-sm">
+                <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-3">
+                    <div class="text-slate-300/85">Интервью и проект</div>
+                    <div class="mt-1 text-2xl font-semibold text-sky-300">
+                        <%= totalInterviews %>
+                    </div>
+                    <div class="mt-1 text-slate-400/85">опубликованных интервью</div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-3">
+                    <div class="text-slate-300/85">Публикации</div>
+                    <div class="mt-1 text-2xl font-semibold text-emerald-300">
+                        <%= totalPublications %>
+                    </div>
+                    <div class="mt-1 text-slate-400/85">статей и рукописей</div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-3">
+                    <div class="text-slate-300/85">Фарма-жизнь</div>
+                    <div class="mt-1 text-2xl font-semibold text-violet-300">
+                        <%= totalPosts %>
+                    </div>
+                    <div class="mt-1 text-slate-400/85">записей в блоге</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative">
+            <div class="absolute -inset-4 bg-gradient-to-tr from-sky-500/30 via-indigo-500/10 to-emerald-400/20 blur-3xl -z-10"></div>
+            <div class="rounded-3xl border border-white/15 bg-slate-950/75 shadow-2xl shadow-sky-900/60 p-6 space-y-4">
+                <h2 class="text-lg font-semibold text-slate-50">Обо мне</h2>
+                <p class="text-sm text-slate-200/85">
+                    Студентка факультета фундаментальной медицины МГУ, направление «Фундаментальная медицина». Интересы: фармакология, патофизиология, аналитическая химия и трансляционные исследования.
+                </p>
+                <ul class="text-sm text-slate-200/90 space-y-1">
+                    <li>• Проект Сколково: адаптация первокурсников ФФМ МГУ</li>
+                    <li>• Интервью со старшекурсниками и выпускниками о пути в профессию</li>
+                    <li>• Подготовка научных статей в российских и зарубежных журналах</li>
+                </ul>
+
+                <div class="border-t border-white/10 pt-3 space-y-1 text-sm text-slate-200/90">
+                    <div class="font-semibold text-sky-200">Контакты</div>
+                    <p>Email: <span class="text-sky-300">youremail@example.com</span></p>
+                    <p>Telegram: <span class="text-sky-300">@yourtelegram</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-10">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg sm:text-xl font-semibold text-slate-50">Последние записи в «Фарма-жизнь»</h2>
+            <a href="/pharma-life" class="text-xs text-sky-300 hover:text-sky-200">Смотреть все</a>
+        </div>
+
+        <% if (latestPosts.length === 0) { %>
+            <p class="text-sm text-slate-300/80">Пока нет записей. Скоро здесь появятся заметки о конференциях, лабораторных работах и фарма-жизни МГУ.</p>
+            <% } else { %>
+                <div class="grid gap-4 sm:grid-cols-3">
+                    <% latestPosts.forEach(function(post){ %>
+                        <a href="/pharma-life/<%= post.slug %>" class="group rounded-2xl border border-white/10 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-sky-400/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-sky-700/40 transition">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-50 group-hover:text-sky-200">
+                                    <%= post.title %>
+                                </h3>
+                                <p class="mt-2 text-xs text-slate-300/85 line-clamp-3">
+                                    <%= post.summary || '' %>
+                                </p>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between text-[11px] text-slate-400/85">
+                                <span>
+              <%= new Date(post.created_at).toLocaleDateString('ru-RU') %>
+            </span>
+                                <span>
+              👁 <%= post.views %> просмотров
+            </span>
+                            </div>
+                        </a>
+                        <% }) %>
+                </div>
+                <% } %>
+    </section>

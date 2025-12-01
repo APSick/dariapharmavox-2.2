@@ -1,0 +1,59 @@
+<% layout('../partials/layout') %>
+
+    <section class="space-y-6">
+        <header class="space-y-2">
+            <h1 class="text-2xl sm:text-3xl font-semibold text-slate-50">
+                Научные публикации и статьи
+            </h1>
+            <p class="text-sm sm:text-base text-slate-200/90 max-w-3xl">
+                Здесь я собираю свои научные работы, статьи и рукописи, подготовленные в рамках учебных и исследовательских проектов. В дальнейшем здесь будут публикации как в российских, так и зарубежных журналах.
+            </p>
+        </header>
+
+        <% if (publications.length === 0) { %>
+            <p class="text-sm text-slate-300/85">
+                Пока публикаций нет. Как только статья будет принята или опубликована, она появится здесь.
+            </p>
+            <% } else { %>
+                <div class="space-y-3">
+                    <% publications.forEach(function(p){ %>
+                        <article class="rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                            <div class="flex-1">
+                                <h2 class="text-sm sm:text-base font-semibold text-slate-50">
+                                    <%= p.title %>
+                                </h2>
+                                <p class="text-xs text-slate-300/90 mt-1">
+                                    <% if (p.journal) { %>
+                                        <span class="font-medium text-sky-200"><%= p.journal %></span>
+                                        <% } %>
+                                            <% if (p.year) { %>
+                                                ·
+                                                <%= p.year %>
+                                                    <% } %>
+                                                        <% if (p.status) { %>
+                                                            · <span class="text-emerald-300"><%= p.status %></span>
+                                                            <% } %>
+                                </p>
+                                <% if (p.notes) { %>
+                                    <p class="mt-1 text-xs text-slate-300/85">
+                                        <%= p.notes %>
+                                    </p>
+                                    <% } %>
+                            </div>
+                            <div class="text-xs text-right space-y-1">
+                                <% if (p.link) { %>
+                                    <a href="<%= p.link %>" target="_blank" class="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-sky-400/70 text-sky-100 hover:bg-sky-500/20 transition">
+                Открыть
+                <span>↗</span>
+              </a>
+                                    <% } %>
+                                        <p class="text-[11px] text-slate-400/80">
+                                            Добавлено:
+                                            <%= new Date(p.created_at).toLocaleDateString('ru-RU') %>
+                                        </p>
+                            </div>
+                        </article>
+                        <% }) %>
+                </div>
+                <% } %>
+    </section>

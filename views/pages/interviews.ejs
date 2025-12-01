@@ -1,0 +1,101 @@
+<% layout('../partials/layout') %>
+
+    <section class="space-y-6">
+        <header class="space-y-2">
+            <h1 class="text-2xl sm:text-3xl font-semibold text-slate-50">
+                Интервью и проект адаптации первокурсников
+            </h1>
+            <p class="text-sm sm:text-base text-slate-200/90 max-w-3xl">
+                На первом курсе я реализовала принимала участие в пилотном проектепо внедрению системы наставничества для студентов ФФМ МГУ от Сколково. В ходе проекта появилась идея снимать интервью с выпускниками отделения фармации МГУ, чтобы у них была возможность
+                поделиться опытом работы, рассказать интересные истории из нашей сферы и много чего еще.
+            </p>
+        </header>
+
+        <% if (interviews.length === 0) { %>
+            <p class="text-sm text-slate-300/85">
+                Пока интервью не загружены. В админке можно добавить интервью: название, видео и ключевые вопросы.
+            </p>
+            <% } else { %>
+                <div class="space-y-6">
+                    <% interviews.forEach(function(i){ %>
+                        <article class="rounded-2xl border border-white/10 bg-slate-900/60 p-4 sm:p-5 space-y-4">
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <div class="flex-1 space-y-2">
+                                    <h2 class="text-lg font-semibold text-slate-50">
+                                        <%= i.title %>
+                                    </h2>
+                                    <% if (i.project_description) { %>
+                                        <p class="text-sm text-slate-200/90">
+                                            <%= i.project_description %>
+                                        </p>
+                                        <% } %>
+                                            <% if (i.goals) { %>
+                                                <p class="text-xs text-slate-300/85">
+                                                    <span class="font-semibold text-sky-200">Цели проекта:</span>
+                                                    <%= i.goals %>
+                                                </p>
+                                                <% } %>
+                                                    <% if (i.relevance) { %>
+                                                        <p class="text-xs text-slate-300/85">
+                                                            <span class="font-semibold text-sky-200">Актуальность:</span>
+                                                            <%= i.relevance %>
+                                                        </p>
+                                                        <% } %>
+                                </div>
+
+                                <% if (i.video_url) { 
+                 const url = (i.video_url || '').trim();
+                 let embedUrl = url;
+
+                 // YouTube: обычная ссылка https://www.youtube.com/watch?v=ID
+                 if (url.includes('youtube.com/watch')) {
+                   const m = url.match(/[?&]v=([^&]+)/);
+                   if (m) {
+                     embedUrl = 'https://www.youtube.com/embed/' + m[1];
+                   }
+                 }
+                 // YouTube: короткая ссылка https://youtu.be/ID
+                 else if (url.includes('youtu.be/')) {
+                   const m = url.match(/youtu\.be\/([^?]+)/);
+                   if (m) {
+                     embedUrl = 'https://www.youtube.com/embed/' + m[1];
+                   }
+                 }
+                 // RuTube: обычная ссылка https://rutube.ru/video/ID/
+                 else if (url.includes('rutube.ru/video/')) {
+                   const m = url.match(/rutube\.ru\/video\/([a-zA-Z0-9]+)/);
+                   if (m) {
+                     embedUrl = 'https://rutube.ru/play/embed/' + m[1];
+                   }
+                 }
+            %>
+                                    <div class="w-full sm:w-72 aspect-video rounded-xl overflow-hidden border border-white/10 bg-slate-950/80">
+                                        <iframe src="<%= embedUrl %>" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                    <% } %>
+                            </div>
+
+                            <% if (i.highlights && i.highlights.length) { %>
+                                <div class="border-t border-white/10 pt-3">
+                                    <div class="text-xs font-semibold text-sky-200 mb-1">
+                                        Основные темы и вопросы интервью:
+                                    </div>
+                                    <ul class="text-xs text-slate-200/90 list-disc list-inside space-y-1">
+                                        <% i.highlights.forEach(function(h){ %>
+                                            <li>
+                                                <%= h %>
+                                            </li>
+                                            <% }) %>
+                                    </ul>
+                                </div>
+                                <% } %>
+
+                                    <p class="text-[11px] text-slate-400/80">
+                                        Записано:
+                                        <%= new Date(i.created_at).toLocaleDateString('ru-RU') %>
+                                    </p>
+                        </article>
+                        <% }) %>
+                </div>
+                <% } %>
+    </section>

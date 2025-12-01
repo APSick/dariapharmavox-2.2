@@ -1,0 +1,19 @@
+<% if (success && success.length) { %>
+    <div class="mb-4 rounded-xl border border-emerald-400/60 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
+        <% success.forEach(function(msg){ %>
+            <p>
+                <%= msg %>
+            </p>
+            <% }) %>
+    </div>
+    <% } %>
+
+        <% if (error && error.length) { %>
+            <div class="mb-4 rounded-xl border border-red-400/60 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+                <% error.forEach(function(msg){ %>
+                    <p>
+                        <%= msg %>
+                    </p>
+                    <% }) %>
+            </div>
+            <% } %>

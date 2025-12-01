@@ -1,0 +1,126 @@
+<% layout('../partials/layout') %>
+
+    <%
+function renderPostContent(text) {
+  if (!text) return '';
+
+  const lines = text.split('\n');
+  let html = '';
+  let inList = false;
+
+  function closeList() {
+    if (inList) {
+      html += '</ul>';
+      inList = false;
+    }
+  }
+
+  // инлайновое форматирование: **жирный**, *курсив*
+  function formatInline(t) {
+    if (!t) return '';
+    return t
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i];
+    const line = rawLine.replace(/\r/g, '');
+    const trimmed = line.trim();
+
+    // пустая строка — отступ
+    if (!trimmed) {
+      closeList();
+      html += '<p class="h-3"></p>';
+      continue;
+    }
+
+     // ---  → горизонтальная линия между разделами
+    if (/^---+$/.test(trimmed)) {
+      closeList();
+      html += '<hr class="my-6 border-t-2 border-slate-600/60">';
+      continue;
+    }
+
+    // H2: "# ... "
+    if (trimmed.startsWith('# ')) {
+      closeList();
+      html += '<h2 class="mt-8 mb-3 text-xl sm:text-2xl font-semibold text-sky-100">'
+           + formatInline(trimmed.slice(2))
+           + '</h2>';
+    }
+    // H3: "## ... "
+    else if (trimmed.startsWith('## ')) {
+      closeList();
+      html += '<h3 class="mt-6 mb-2 text-lg font-semibold text-slate-100">'
+           + formatInline(trimmed.slice(3))
+           + '</h3>';
+    }
+    // H4: "### ... "  ← твои подпункты 1.1, 1.2 и т.д.
+    else if (trimmed.startsWith('### ')) {
+      closeList();
+      html += '<h4 class="mt-4 mb-1 text-base font-semibold text-slate-100">'
+           + formatInline(trimmed.slice(4))
+           + '</h4>';
+    }
+    // пункт списка: "* ..." или "- ..."
+    else if (trimmed.startsWith('* ') || trimmed.startsWith('- ')) {
+      if (!inList) {
+        html += '<ul class="mt-2 ml-5 list-disc space-y-1">';
+        inList = true;
+      }
+      const itemText = trimmed.slice(2);
+      html += '<li>' + formatInline(itemText) + '</li>';
+    }
+    // обычный абзац
+    else {
+      closeList();
+      html += '<p class="mt-2 text-sm sm:text-base leading-relaxed text-slate-100">'
+           + formatInline(trimmed)
+           + '</p>';
+    }
+  }
+
+  closeList();
+  return html;
+}
+%>
+
+
+        <article class="max-w-3xl mx-auto space-y-4">
+            <header class="space-y-2">
+                <p class="text-xs text-slate-400/85">
+                    <%= new Date(post.created_at).toLocaleDateString('ru-RU') %> · 👁
+                        <span class="text-sky-200 font-semibold"><%= post.views %></span> просмотров · ❤️
+                        <span class="text-rose-200 font-semibold"><%= post.likes || 0 %></span> лайков
+                </p>
+
+                <h1 class="text-2xl sm:text-3xl font-semibold text-slate-50">
+                    <%= post.title %>
+                </h1>
+
+                <% if (post.summary) { %>
+                    <p class="text-sm text-slate-200/90">
+                        <%= post.summary %>
+                    </p>
+                    <% } %>
+            </header>
+
+            <% if (currentUser) { %>
+                <form action="/pharma-life/<%= post.slug %>/like" method="POST" class="mt-2">
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-rose-400/70 px-3 py-1.5 text-xs <%= userLiked ? 'bg-rose-500/20 text-rose-100' : 'bg-slate-900/60 text-slate-100' %> hover:bg-rose-500/30 transition">
+        <span><%= userLiked ? '❤️ Убрать лайк' : '🤍 Нравится' %></span>
+        <span class="text-[11px] text-rose-200/90"><%= post.likes || 0 %></span>
+      </button>
+                </form>
+                <% } else { %>
+                    <p class="mt-2 text-[11px] text-slate-400/90">
+                        Войдите, чтобы поставить лайк.
+                        <a href="/login" class="text-sky-300 underline">Войти</a>
+                    </p>
+                    <% } %>
+
+                        <div class="prose prose-invert prose-sm sm:prose-base max-w-none">
+                            <%- renderPostContent(post.content || '') %>
+                        </div>
+        </article>

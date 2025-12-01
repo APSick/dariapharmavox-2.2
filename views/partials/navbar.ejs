@@ -1,0 +1,49 @@
+<header class="backdrop-blur bg-slate-900/70 border-b border-white/10 sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+        <a href="/" class="flex items-center gap-2">
+            <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-sky-400 to-indigo-500 flex items-center justify-center text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/40">
+                D
+            </div>
+            <div class="flex flex-col leading-tight">
+                <span class="font-semibold text-slate-50 tracking-tight">Daria Pharma Vox</span>
+                <span class="text-xs text-slate-300/80">ФФМ МГУ · фармация · наука</span>
+            </div>
+        </a>
+
+        <nav class="flex items-center gap-4 text-sm font-medium">
+            <a href="/" class="hover:text-sky-300 transition-colors">Главная</a>
+            <a href="/interviews" class="hover:text-sky-300 transition-colors">Интервью</a>
+            <a href="/publications" class="hover:text-sky-300 transition-colors">Публикации</a>
+            <a href="/pharma-life" class="hover:text-sky-300 transition-colors">Фарма-жизнь</a>
+
+            <% if (currentUser) { %>
+                <!-- Пользователь залогинен -->
+                <span class="text-xs text-slate-300/80 hidden sm:inline">
+          Аккаунт:
+          <span class="font-semibold text-sky-200"><%= currentUser.username %></span>
+                </span>
+
+                <% if (currentUser.is_admin) { %>
+                    <a href="/admin" class="text-xs px-2 py-1 rounded-full bg-sky-500/20 border border-sky-400/60 hover:bg-sky-500/30 transition">
+            Админ
+          </a>
+                    <% } %>
+
+                        <form action="/admin/logout" method="POST" class="inline">
+                            <button class="text-xs text-slate-300/80 hover:text-red-300" type="submit">
+            Выйти
+          </button>
+                        </form>
+                        <% } else { %>
+                            <!-- Гость -->
+                            <a href="/login" class="text-xs text-slate-400/80 hover:text-sky-300">
+          Вход
+        </a>
+                            <a href="/register" class="text-xs text-slate-300/90 hover:text-emerald-300">
+          Регистрация
+        </a>
+                            <% } %>
+
+        </nav>
+    </div>
+</header>

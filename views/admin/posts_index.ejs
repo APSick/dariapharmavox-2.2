@@ -1,0 +1,59 @@
+<% layout('../partials/layout') %>
+
+    <section class="space-y-4">
+        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+                <h1 class="text-2xl font-semibold text-slate-50">Посты «Фарма-жизнь»</h1>
+                <p class="text-sm text-slate-300/90">Управление записями блога.</p>
+            </div>
+            <a href="/admin/posts/new" class="px-3 py-1.5 rounded-xl bg-violet-500 hover:bg-violet-400 text-slate-950 text-xs font-semibold transition">
+      + Новый пост
+    </a>
+        </header>
+
+        <% if (!posts.length) { %>
+            <p class="text-sm text-slate-300/85">Постов пока нет.</p>
+            <% } else { %>
+                <div class="rounded-2xl border border-white/10 bg-slate-900/70 overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-950/70 text-slate-300/90 text-xs uppercase tracking-wide">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Заголовок</th>
+                                <th class="px-2 py-2 text-left w-24">Дата</th>
+                                <th class="px-2 py-2 text-left w-24">Просмотры</th>
+                                <th class="px-2 py-2 text-right w-40">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% posts.forEach(function(p){ %>
+                                <tr class="border-t border-white/5 hover:bg-slate-900/90">
+                                    <td class="px-4 py-2">
+                                        <span class="font-medium text-slate-50"><%= p.title %></span>
+                                    </td>
+                                    <td class="px-2 py-2 text-xs text-slate-300/85">
+                                        <%= new Date(p.created_at).toLocaleDateString('ru-RU') %>
+                                    </td>
+                                    <td class="px-2 py-2 text-xs text-sky-200">
+                                        👁
+                                        <%= p.views %>
+                                    </td>
+                                    <td class="px-2 py-2 text-right text-xs">
+                                        <a href="/pharma-life/<%= p.slug %>" class="inline-flex items-center px-2 py-1 rounded-lg bg-slate-800/70 text-slate-100 hover:bg-slate-700/80 mr-1" target="_blank">
+                  Открыть
+                </a>
+                                        <a href="/admin/posts/<%= p.id %>/edit" class="inline-flex items-center px-2 py-1 rounded-lg bg-sky-500/15 text-sky-200 hover:bg-sky-500/30 mr-1">
+                  Редактировать
+                </a>
+                                        <form action="/admin/posts/<%= p.id %>?_method=DELETE" method="POST" class="inline" onsubmit="return confirm('Удалить этот пост?');">
+                                            <button type="submit" class="inline-flex items-center px-2 py-1 rounded-lg bg-red-500/15 text-red-200 hover:bg-red-500/30">
+                    Удалить
+                  </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+    </section>
